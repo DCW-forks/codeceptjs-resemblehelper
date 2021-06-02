@@ -1,13 +1,29 @@
 {
-  "include": ["index.js"],
+  "ts-node": {
+    "files": true
+  },
+
+  //"include": ["index.js"],
   "compilerOptions": {
+    "target": "es2018",
+    "lib": ["es2018", "dom"],
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "strictNullChecks": true,
+    "types": ["codeceptjs"],
+
+    "noImplicitAny": true,
+    // predtym false
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+
     // Tells TypeScript to read JS files, as
     // normally they are ignored as source files
-    "allowJs": true,
+    //"allowJs": true,
     // Generate d.ts files
-    "declaration": true,
+    //"declaration": true,
     // This compiler run should
     // only output d.ts files
-    "emitDeclarationOnly": true,
+    //"emitDeclarationOnly": true,
   }
 }
