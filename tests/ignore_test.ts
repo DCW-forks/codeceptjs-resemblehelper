@@ -1,18 +1,21 @@
 Feature('testing scenarios');
 
-Scenario('Ignore element for screenshot visual diff', async ({ I }) => {
+Scenario.only('Ignore element for screenshot visual diff', async ({ I }) => {
   I.amOnPage('https://the-internet.herokuapp.com');
   // await I.scrollTo('[href*="/dropdown"]')
   I.wait(1);
   // I.scrollTo(0, 120);
-  await I.saveScreenshot('I_FRAMES_test1.png');
-  await I.seeVisualDiff('I_FRAMES_test1.png', { ignoredElement: '[href*="/dropdown"]' });
+  await I.saveScreenshot('I_FRAMES_test12.png');
+  await I.seeVisualDiff('I_FRAMES_test12.png', { ignoredElement: '[href*="/dropdown"]' });
+  I.seeVisualDiff('fd', {})
 });
 
 Scenario('Ignore all same elements', async ({ I }) => {
   I.amOnPage('https://the-internet.herokuapp.com');
   await I.saveScreenshot('MULTIPLE_pw.png');
   await I.seeVisualDiff('MULTIPLE_pw.png', { ignoredQueryElementAll: '//ul/li/a' });
+  
+ 
 });
 
 Scenario('Ignore 2 elements for screenshot visual diff', async ({ I }) => {
@@ -61,14 +64,14 @@ Scenario('IgnoredQueryElementAll with shadowDOM', async ({ I }) => {
 //   I.wait(4);
 // });
 
-Scenario('Shadow test', async ({ I }) => {
-  I.amOnPage('http://the-internet.herokuapp.com/shadowdom');
-  I.waitForElement({ shadow: ['my-paragraph'] });
-  I.waitForVisible({ shadow: ['my-paragraph'] }, 5);
-  I.dontSee('My default text', { shadow: ['my-paragraph', 'p'] });
-  I.see("Let's have some different text!", { shadow: ['my-paragraph', 'p'] });
-  I.wait(2);
-});
+// Scenario('Shadow test', async ({ I }) => {
+//   I.amOnPage('http://the-internet.herokuapp.com/shadowdom');
+//   I.waitForElement({ shadow: ['my-paragraph'] });
+//   I.waitForVisible({ shadow: ['my-paragraph'] }, 5);
+//   I.dontSee('My default text', { shadow: ['my-paragraph', 'p'] });
+//   I.see("Let's have some different text!", { shadow: ['my-paragraph', 'p'] });
+//   I.wait(2);
+// });
 
 Scenario('Check context menu page with screenshot visual diff', async ({ I }) => {
   I.amOnPage('https://the-internet.herokuapp.com/context_menu');
@@ -141,7 +144,7 @@ xScenario('blablabla kill meeee fuck this shit', async ({ I }) => {
   await I.seeVisualDiffForElement('div.example', 'suradniceeee2.png', { ignoredQueryElementAll: '.large-2' });
 });
 
-Scenario.only('monday I have nothing to do', async ({ I }) => {
+Scenario('monday I have nothing to do', async ({ I }) => {
   //
   I.amOnPage('https://the-internet.herokuapp.com/dynamic_content');
   // element image screenshoted to root/output

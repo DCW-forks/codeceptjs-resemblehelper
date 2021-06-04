@@ -72,3 +72,5 @@ typings/
 
 # Ignore auto-generated types
 index.d.ts
+
+/lib

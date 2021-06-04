@@ -1,3 +1,4 @@
+require('ts-node/register');
 const { setHeadlessWhen } = require('@codeceptjs/configure');
 
 // turn on headless mode when running with HEADLESS=true environment variable
@@ -5,7 +6,7 @@ const { setHeadlessWhen } = require('@codeceptjs/configure');
 setHeadlessWhen(process.env.HEADLESS);
 
 exports.config = {
-  tests: '../tests/ignore_test.js',
+  tests: '../tests/ignore_test.+(j|t)s',
   output: '../output',
   helpers: {
     WebDriver: {
@@ -15,12 +16,12 @@ exports.config = {
       windowSize: '1100x800',
     },
     ResembleHelper: {
-      require: '../index',
+      require: '../index.ts',
       screenshotFolder: '../tests/output/',
       baseFolder: '../tests/screenshots/base/',
       diffFolder: '../tests/screenshots/diff/',
-      skipFailure: true,
-      alwaysSaveDiff: true,
+      //skipFailure: true,
+      //alwaysSaveDiff: true,
 
       /*
       prepareBaseImage = Optional. When true then the system replaces all of the baselines related to the test case(s) you ran.

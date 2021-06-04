@@ -1,4 +1,5 @@
 {
+
   "ts-node": {
     "files": true
   },
@@ -11,9 +12,10 @@
     "module": "commonjs",
     "strictNullChecks": true,
     "types": ["codeceptjs"],
-
+    "outDir": "lib",
+    "declaration": true,
+    "sourceMap": false,
     "noImplicitAny": true,
-    // predtym false
     "noUnusedLocals": false,
     "noUnusedParameters": false,
 
@@ -25,5 +27,7 @@
     // This compiler run should
     // only output d.ts files
     //"emitDeclarationOnly": true,
-  }
+  },
+  "include": ["root", "index.ts"],
+    "exclude": ["node_modules"]
 }

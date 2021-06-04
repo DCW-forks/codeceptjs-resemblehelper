@@ -5,17 +5,20 @@
     "access": "public"
   },
   "description": "Forked Resemble JS helper for CodeceptJS, with Support for Playwright, Webdriver, TestCafe, Puppeteer & Appium",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "homepage": "https://github.com/dixons/codeceptjs-resemblehelper#readme",
   "scripts": {
-    "tsc:build": "npx typescript",
+    "tsc:build": "npx tsc",
     "test": "echo \"test OK\"",
-    "lint": "eslint index.js tools configs tests",
+    "lint": "eslint index.ts tools configs tests",
     "lint-fix": "eslint index.js tools configs tests --fix",
     "conf:prepareBaseImage_undefined": "codeceptjs run --config=./configs/prepareBaseImage-undefined.conf.js  --debug",
     "conf:prepareBaseImage_true": "codeceptjs run --config=./configs/prepareBaseImage-true.conf.js  --debug",
-    "conf:prepareBaseImage_false": "codeceptjs run --config=./configs/prepareBaseImage-false.conf.js  --debug"
+    "conf:prepareBaseImage_false": "codeceptjs run --config=./configs/prepareBaseImage-false.conf.js  --debug",
+    "def": "npx codeceptjs def --output .",
+    "ignored_TS": "npm run def -- --config ./configs/ignored.conf.js && codeceptjs run --config=./configs/ignored.conf.js --debug",
+    "generate_": "npm run def -- --config ./configs/ignored.conf.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +26,7 @@
   },
   "dependencies": {
     "@types/mkdirp": "^1.0.1",
+    "@types/mocha": "^8.2.2",
     "@types/node": "^15.6.2",
     "@types/resemblejs": "^3.2.0",
     "assert": "^1.5.0",
@@ -33,7 +37,8 @@
     "mkdirp": "^1.0.4",
     "mz": "^2.7.0",
     "path": "^0.12.7",
-    "resemblejs": "^3.2.4"
+    "resemblejs": "^3.2.4",
+    "ts-node": "^10.0.0"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^5.0.1",
@@ -56,6 +61,5 @@
     "resemblejs",
     "codeceptjs-resemble"
   ],
-  "author": "Puneet Kala <puneet.kala@percona.com>",
   "license": "MIT"
 }

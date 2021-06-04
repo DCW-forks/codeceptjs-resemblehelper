@@ -8,7 +8,8 @@ const getDirName = require('path').dirname;
 const sizeOf = require('image-size');
 // const chalk = require('chalk');
 const Helper = require('@codeceptjs/helper');
-
+//@ts-ignore
+import {ElementHandle} from 'playwright'
 
 import resemble from 'resemblejs' 
 import assert from 'assert';
@@ -33,8 +34,9 @@ type Options  = {
   skipFailure?: boolean;
   boundingBox?: BoxCoordinates;
   outputSettings?: Object
-};
-type Selector = string | {shadow: string} | {css: string}
+} & resemble.ResembleSingleCallbackComparisonOptions;
+
+type Selector = string | {shadow: string | string[]} | {css: string}
 
 type BoxCoordinates = {left: number, top: number, right: number, bottom: number}
 
@@ -121,7 +123,8 @@ class ResembleHelper extends Helper {
       this.debug(`Tolerance Level Provided ${options.tolerance}`);
       const tolerance = options.tolerance!;
 
-      resemble.compare(baseImage, actualImage, options as any, (err, data) => {
+      resemble.compare(baseImage, actualImage, options, (err, data) => {
+        console.log(options, " ___OPTIOOOONS")
         if (err) {
           reject(err);
         } else {
@@ -174,7 +177,7 @@ class ResembleHelper extends Helper {
    * Get actual date and time in format MMMM-MM-MMTHH:MM:SS
    * @returns <void>
    */
-  private _getTimestamp() {
+  private _getTimestamp(): string {
     let now = new Date();
     return now.toISOString().slice(0, 19).replace(/:/g, '_');
   }
@@ -232,7 +235,7 @@ class ResembleHelper extends Helper {
    * @returns {Promise<void>}
    */
 
-  private static async _addAttachment(baseImage: string, misMatch: number, tolerance: number, timestamp: string): Promise<void> {
+  private async _addAttachment(baseImage: string, misMatch: number, tolerance: number, timestamp: string): Promise<void> {
     const allure = codeceptjs.container.plugins('allure');
     const diffImage = `Diff_${baseImage.split('.')[0]}_${timestamp}.png`;
 
@@ -286,12 +289,12 @@ class ResembleHelper extends Helper {
     });
     fs.readFile(this.screenshotFolder + baseImage, {encoding: 'base64'}, (err, base64data) => {
       if (err) throw err;
-      const params = {
+      const params: AWS.S3.Types.PutObjectRequest = {
         Bucket: bucketName,
         Key: `output/${baseImage}`,
         Body: base64data,
       };
-      s3.upload(params, (uErr: Error, uData: AWS.S3.ManagedUpload.SendData) => {
+      s3.upload(params, (uErr, uData) => {
         if (uErr) throw uErr;
         console.log(`Screenshot Image uploaded successfully at ${uData.Location}`);
       });
@@ -299,7 +302,7 @@ class ResembleHelper extends Helper {
     fs.readFile(`${this.diffFolder}Diff_${baseImage}`, {encoding: 'base64'}, (err, base64data) => {
       if (err) console.log('Diff image not generated');
       else {
-        const params = {
+        const params: AWS.S3.Types.PutObjectRequest = {
           Bucket: bucketName,
           Key: `diff/Diff_${baseImage}`,
           Body: base64data,
@@ -314,7 +317,7 @@ class ResembleHelper extends Helper {
       fs.readFile(this.baseFolder + baseImage, {encoding: 'base64'}, (err, base64data) => {
         if (err) throw err;
         else {
-          const params = {
+          const params: AWS.S3.Types.PutObjectRequest = {
             Bucket: bucketName,
             Key: `base/${baseImage}`,
             Body: base64data,
@@ -347,7 +350,7 @@ class ResembleHelper extends Helper {
       secretAccessKey,
       region,
     });
-    const params = {
+    const params: AWS.S3.Types.GetObjectRequest = {
       Bucket: bucketName,
       Key: `base/${baseImage}`,
     };
@@ -355,7 +358,7 @@ class ResembleHelper extends Helper {
       s3.getObject(params, (err, data) => {
         if (err) console.error(err);
         console.log(this.baseFolder + baseImage);
-        fs.writeFileSync(this.baseFolder + baseImage, data.Body);
+        fs.writeFileSync(this.baseFolder + baseImage, data.Body as string);
         resolve('File Downloaded Successfully');
       });
     });
@@ -367,7 +370,7 @@ class ResembleHelper extends Helper {
    * @param options           Options ex {prepareBaseImage: true, tolerance: 5} along with Resemble JS Options, read more here: https://github.com/rsmbl/Resemble.js
    * @returns {Promise<void>}
    */
-  public async seeVisualDiff(baseImage: string, options: Options|undefined): Promise<void> {
+  public async seeVisualDiff(baseImage: string, options?: Options): Promise<void> {
     await this._assertVisualDiff(undefined, baseImage, options);
   }
 
@@ -379,7 +382,7 @@ class ResembleHelper extends Helper {
    * @param options    Options ex {prepareBaseImage: true, tolerance: 5} along with Resemble JS Options, read more here: https://github.com/rsmbl/Resemble.js
    * @returns {Promise<void>}
    */
-  public async seeVisualDiffForElement(selector: Selector, baseImage: string, options: undefined|Options): Promise<void> {
+  public async seeVisualDiffForElement(selector: Selector, baseImage: string, options?: Options): Promise<void> {
     await this._assertVisualDiff(selector, baseImage, options);
   }
 
@@ -671,7 +674,7 @@ class ResembleHelper extends Helper {
    * @param selector represents counted element in human language
    * @returns {Promise<{ignoredBoxes: [{left: *, top: *, right: *, bottom: *},{...}]>}
    */
-  private async _countCoordinates(el:any, selector:Selector):Promise<BoxCoordinates> {
+  private async _countCoordinates(el:WebdriverIO.Element | ElementHandle, selector:Selector):Promise<BoxCoordinates> {
     const helper = this._getHelper();
     let location; let size;
 
@@ -716,8 +719,8 @@ class ResembleHelper extends Helper {
    */
   private async _locateAll(selector:Selector):Promise<BoxCoordinates[]> {
     const browser = this.helpers['WebDriver'] || this.helpers['Playwright'];
-    const els = await browser._locate(selector);
-    return await Promise.all(els.map(async (item:any) => await this._countCoordinates(item, selector)));
+    const els: WebdriverIO.ElementArray = await browser._locate(selector);
+    return await Promise.all(els.map(async (item) => await this._countCoordinates(item, selector)));
   }
 
   private _getHelper() {
@@ -746,4 +749,4 @@ class ResembleHelper extends Helper {
   }
 }
 
-module.exports = ResembleHelper;
+export = ResembleHelper;
