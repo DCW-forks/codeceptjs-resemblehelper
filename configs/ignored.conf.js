@@ -16,12 +16,12 @@ exports.config = {
       windowSize: '1100x800',
     },
     ResembleHelper: {
-      require: '../index.ts',
+      require: '../lib/index',
       screenshotFolder: '../tests/output/',
       baseFolder: '../tests/screenshots/base/',
       diffFolder: '../tests/screenshots/diff/',
-      //skipFailure: true,
-      //alwaysSaveDiff: true,
+      // skipFailure: true,
+      // alwaysSaveDiff: true,
 
       /*
       prepareBaseImage = Optional. When true then the system replaces all of the baselines related to the test case(s) you ran.
