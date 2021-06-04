@@ -16,8 +16,8 @@ exports.config = {
       windowSize: '1100x800',
     },
     ResembleHelper: {
-      require: '../lib/index',
-      screenshotFolder: '../tests/output/',
+      require: '../index.ts',
+      screenshotFolder: '../tests/output/', 
       baseFolder: '../tests/screenshots/base/',
       diffFolder: '../tests/screenshots/diff/',
       // skipFailure: true,

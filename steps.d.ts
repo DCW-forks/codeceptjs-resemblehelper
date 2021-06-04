@@ -1,5 +1,5 @@
 /// <reference types='codeceptjs' />
-type ResembleHelper = import('./lib/index');
+type ResembleHelper = import('./index');
 type AssertWrapper = import('codeceptjs-assert');
 
 declare namespace CodeceptJS {
