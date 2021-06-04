@@ -9,5 +9,7 @@
     "module": "commonjs",
     "strictNullChecks": true,
     "types": ["codeceptjs"],
+    "outDir": "lib",
+    "declaration": true,
   },
 }
