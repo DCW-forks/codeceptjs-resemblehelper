@@ -11,5 +11,6 @@
     "types": ["codeceptjs"],
     "outDir": "lib",
     "declaration": true,
+    "noImplicitAny": true
   },
 }

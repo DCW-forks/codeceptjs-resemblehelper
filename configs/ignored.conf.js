@@ -6,27 +6,20 @@ const { setHeadlessWhen } = require('@codeceptjs/configure');
 setHeadlessWhen(process.env.HEADLESS);
 
 exports.config = {
-  tests: '../tests/ignore_test.+(j|t)s',
+  tests: '../tests/ignoreElementX_test.+(j|t)s',
   output: '../output',
   helpers: {
     WebDriver: {
       url: 'http://localhost',
+      //host: 'selenoid',
       browser: 'chrome',
-      // windowSize: '1100x600',
       windowSize: '1100x800',
     },
     ResembleHelper: {
       require: '../index.ts',
-      screenshotFolder: '../tests/output/', 
+      screenshotFolder: '../tests/output/',
       baseFolder: '../tests/screenshots/base/',
       diffFolder: '../tests/screenshots/diff/',
-      // skipFailure: true,
-      // alwaysSaveDiff: true,
-
-      /*
-      prepareBaseImage = Optional. When true then the system replaces all of the baselines related to the test case(s) you ran.
-      This is equivalent of setting the option prepareBaseImage: true in all verifications of the test file.
-      */
     },
     AssertWrapper: {
       require: 'codeceptjs-assert',
@@ -38,9 +31,14 @@ exports.config = {
   mocha: {},
   name: 'codeceptjs-resemblehelper',
   plugins: {
-    // wdio: {
+    // selenoid: {
     //   enabled: true,
-    //   services: ['selenium-standalone'],
+    //   deletePassed: true,
+    //   autoCreate: false,
+    //   autoStart: false,
+    //   sessionTimeout: '30m',
+    //   enableVideo: false,
+    //   enableLog: true,
     // },
     pauseOnFail: {},
     tryTo: {
