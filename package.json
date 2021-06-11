@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "assert": "^1.5.0",
-    "aws-sdk": "^2.662.0",
+    "aws-sdk": "^2.912.0",
     "canvas": "^2.6.1",
     "chalk": "^4.1.0",
     "image-size": "^0.8.3",
